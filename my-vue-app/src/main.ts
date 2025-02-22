@@ -1,9 +1,10 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import "bootstrap/dist/css/bootstrap.min.css"; // ✅ ใช้ Bootstrap CSS
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // ✅ ใช้ Bootstrap JS
-import "./assets/tailwind.css"; // ✅ ใช้ Tailwind CSS
+
+// ✅ โหลด Bootstrap ก่อน
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 const app = createApp(App);
 app.use(router);
