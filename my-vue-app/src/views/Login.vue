@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { login } from "@/services/auth";
+import { ref, onMounted } from "vue";
+import { login } from "@/services/auth"; // ใช้ฟังก์ชัน login จาก service
 import { useRouter } from "vue-router";
 import Navbar from "@/components/Navbar.vue";
 
@@ -8,18 +8,32 @@ const email = ref("");
 const password = ref("");
 const message = ref("");
 const isLoading = ref(false);
-const showPassword = ref(false); // ✅ เพิ่มตัวแปรแสดง/ซ่อนรหัสผ่าน
+const showPassword = ref(false); // เพิ่มตัวแปรแสดง/ซ่อนรหัสผ่าน
 const router = useRouter();
+
+// ตรวจสอบ token เมื่อโหลดหน้า
+onMounted(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    router.push("/dashboard");  // ถ้ามี token ให้ redirect ไปที่ dashboard
+  }
+});
 
 const handleLogin = async () => {
   message.value = "";
   isLoading.value = true;
 
   try {
+    // เรียกฟังก์ชัน login จาก service และรับ response ที่มี token และ user_id
     const response = await login(email.value, password.value);
+
+    // เก็บ token และ user_id ลงใน localStorage
     localStorage.setItem("token", response.token);
+    localStorage.setItem("user_id", response.user.id.toString());  // เก็บ user_id ลงใน localStorage
+
     message.value = "Login Complete!";
 
+    // หลังจาก 1.5 วินาที ไปที่หน้า dashboard
     setTimeout(() => {
       router.push("/dashboard");
     }, 1500);
@@ -30,7 +44,7 @@ const handleLogin = async () => {
   }
 };
 
-// ✅ ฟังก์ชันโยงไปหน้า Register
+// ฟังก์ชันโยงไปหน้า Register
 const goToRegister = () => {
   router.push("/register");
 };
@@ -87,7 +101,7 @@ const goToRegister = () => {
 </template>
 
 <style scoped>
-/* ✅ ปรับขนาดฟอร์มให้เหมือนหน้า Register */
+/* ปรับขนาดฟอร์มให้เหมือนหน้า Register */
 .form-container {
   max-width: 500px;
   width: 100%;
@@ -95,7 +109,7 @@ const goToRegister = () => {
   background-color: #ffffff;
 }
 
-/* ✅ ทำให้พื้นหลังเป็นสีเขียวอ่อน */
+/* ทำให้พื้นหลังเป็นสีเขียวอ่อน */
 body {
   background-color: #e1fdde;
 }

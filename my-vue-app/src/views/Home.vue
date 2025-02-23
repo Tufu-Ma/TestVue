@@ -1,16 +1,26 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Navbar from "@/components/Navbar.vue";
+
 const router = useRouter();
 
-// ✅ เมื่อกดปุ่ม "Get Started" ให้ไปที่หน้าหลักของบอร์ด
+// ✅ ตรวจสอบว่า user ได้ล็อกอินแล้วหรือยัง
+onMounted(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    router.push("/dashboard");  // ถ้ามี token ให้ไปที่หน้า dashboard
+  }
+});
+
+// ✅ เมื่อกดปุ่ม "Get Started" ให้ไปที่หน้าล็อกอิน
 const getStarted = () => {
   router.push("/login");
 };
 </script>
 
 <template>
-    <Navbar />
+  <Navbar />
   <div class="home-container">
     <!-- ✅ เนื้อหาทางซ้าย -->
     <div class="text-section">
