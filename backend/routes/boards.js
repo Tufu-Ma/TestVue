@@ -178,10 +178,8 @@ router.get("/:board_id", async (req, res) => {
     console.log(`🔍 Fetching board data for board_id=${board_id}`);
 
     try {
-        const result = await pool.query(
-            "SELECT board_name FROM boards WHERE board_id = $1",
-            [board_id]
-        );
+        const result = await pool.query("SELECT board_name FROM boards WHERE board_id = $1", [req.params.board_id]);
+
 
         if (result.rows.length === 0) {
             console.error("🚨 Board not found:", board_id);

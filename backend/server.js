@@ -10,6 +10,7 @@ const boardsRouter = require("./routes/boards");
 const boardMembersRouter = require("./routes/board_members");
 const boardColumnsRouter = require('./routes/board_columns');
 const tasksRouter = require("./routes/tasks");
+const task_assignees = require("./routes/taskAssignees");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api", boardMembersRouter); // ใช้งาน API สมาชิ�
 app.use('/api/board_columns', boardColumnsRouter);
 app.use("/api/boards", boardsRouter);  // ✅ ต้องเป็นแบบนี้
 app.use("/api/tasks", tasksRouter);
+app.use("/api/task_assignees",task_assignees);
 
 // ✅ ฟังก์ชันเริ่มต้นเซิร์ฟเวอร์หลังจากเชื่อม DB สำเร็จ
 const startServer = async () => {

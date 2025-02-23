@@ -143,4 +143,22 @@ router.put("/:task_id/move", async (req, res) => {
     }
 });
 
+// ✅ API ดึงข้อมูล Task ตาม ID
+router.get("/:task_id", async (req, res) => {
+    const { task_id } = req.params;
+
+    try {
+        const result = await pool.query("SELECT * FROM tasks WHERE task_id = $1", [task_id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+
+        res.json(result.rows[0]); // ส่งข้อมูล Task กลับไป
+    } catch (error) {
+        console.error("❌ Error fetching task:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
 module.exports = router;

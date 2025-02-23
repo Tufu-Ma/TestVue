@@ -48,12 +48,18 @@ const goTo = (path: string) => {
 };
 
 // ฟังก์ชันสำหรับลบการแจ้งเตือน
-const removeNotification = async (id: number) => {
+const removeNotification = async (notificationId) => {
+  if (!notificationId) {
+    console.error("❌ Error: notificationId is undefined when calling removeNotification");
+    return;
+  }
+
   try {
-    await deleteNotification(id);
-    notifications.value = notifications.value.filter(notification => notification.id !== id);
+    await deleteNotification(notificationId);
+    notifications.value = notifications.value.filter(n => n.notification_id !== notificationId);
+    console.log(`✅ Notification ${notificationId} removed from UI`);
   } catch (error) {
-    console.error("Error deleting notification:", error);
+    console.error("❌ Error deleting notification:", error);
   }
 };
 
@@ -140,7 +146,7 @@ onMounted(async () => {
       <p @click="goTo(`/notifications/${notification.id}`)" class="notification-message">
         {{ notification.message }}
       </p>
-      <button @click="removeNotification(notification.id)" class="delete-btn">
+      <button @click="removeNotification(notification?.notification_id)" class="delete-btn">
         <i class="bi bi-x-circle"></i>
       </button>
     </div>
